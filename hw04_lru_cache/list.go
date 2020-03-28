@@ -2,8 +2,8 @@ package hw04_lru_cache //nolint:golint,stylecheck
 
 type listItem struct {
 	Value interface{}
-	Next *listItem
-	Prev *listItem
+	Next  *listItem
+	Prev  *listItem
 }
 
 type list struct {
@@ -46,19 +46,19 @@ func (l *list) PushFront(v interface{}) *listItem {
 		l.Length = 1
 
 		return newElm
-	} else {
-		head := l.Head
-		newElm := &listItem{
-			Value: v,
-			Next:  head,
-			Prev:  nil,
-		}
-		head.Prev = newElm
-		l.Head = newElm
-		l.Length += 1
-
-		return newElm
 	}
+
+	head := l.Head
+	newElm := &listItem{
+		Value: v,
+		Next:  head,
+		Prev:  nil,
+	}
+	head.Prev = newElm
+	l.Head = newElm
+	l.Length++
+
+	return newElm
 }
 
 func (l *list) PushBack(v interface{}) *listItem {
@@ -73,19 +73,19 @@ func (l *list) PushBack(v interface{}) *listItem {
 		l.Length = 1
 
 		return newElm
-	} else {
-		tail := l.Tail
-		newElm := &listItem{
-			Value: v,
-			Next:  nil,
-			Prev:  tail,
-		}
-		tail.Next = newElm
-		l.Tail = newElm
-		l.Length += 1
-
-		return newElm
 	}
+
+	tail := l.Tail
+	newElm := &listItem{
+		Value: v,
+		Next:  nil,
+		Prev:  tail,
+	}
+	tail.Next = newElm
+	l.Tail = newElm
+	l.Length++
+
+	return newElm
 }
 
 func (l *list) Remove(i *listItem) {
@@ -97,21 +97,21 @@ func (l *list) Remove(i *listItem) {
 	if i.Prev != nil && i.Next != nil {
 		i.Prev.Next = i.Next
 		i.Next.Prev = i.Prev
-		l.Length -= 1
+		l.Length--
 		return
 	}
 
 	if i.Prev == nil && i.Next != nil {
 		l.Head = i.Next
 		l.Head.Prev = nil
-		l.Length -= 1
+		l.Length--
 		return
 	}
 
 	if i.Prev != nil && i.Next == nil {
 		l.Tail = i.Prev
 		l.Tail.Next = nil
-		l.Length -= 1
+		l.Length--
 		return
 	}
 
