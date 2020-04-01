@@ -34,18 +34,22 @@ func (l list) Back() *listItem {
 	return l.Tail
 }
 
+func (l *list) AddFirstElement(v interface{}) *listItem {
+	newElm := &listItem{
+		Value: v,
+		Next:  nil,
+		Prev:  nil,
+	}
+	l.Head = newElm
+	l.Tail = newElm
+	l.Length = 1
+
+	return newElm
+}
+
 func (l *list) PushFront(v interface{}) *listItem {
 	if l.Length == 0 {
-		newElm := &listItem{
-			Value: v,
-			Next:  nil,
-			Prev:  nil,
-		}
-		l.Head = newElm
-		l.Tail = newElm
-		l.Length = 1
-
-		return newElm
+		return l.AddFirstElement(v)
 	}
 
 	head := l.Head
@@ -63,16 +67,7 @@ func (l *list) PushFront(v interface{}) *listItem {
 
 func (l *list) PushBack(v interface{}) *listItem {
 	if l.Length == 0 {
-		newElm := &listItem{
-			Value: v,
-			Next:  nil,
-			Prev:  nil,
-		}
-		l.Head = newElm
-		l.Tail = newElm
-		l.Length = 1
-
-		return newElm
+		return l.AddFirstElement(v)
 	}
 
 	tail := l.Tail
