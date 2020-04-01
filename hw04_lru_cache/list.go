@@ -22,15 +22,15 @@ type List interface {
 	MoveToFront(i *listItem)
 }
 
-func (l *list) Len() int {
+func (l list) Len() int {
 	return l.Length
 }
 
-func (l *list) Front() *listItem {
+func (l list) Front() *listItem {
 	return l.Head
 }
 
-func (l *list) Back() *listItem {
+func (l list) Back() *listItem {
 	return l.Tail
 }
 
