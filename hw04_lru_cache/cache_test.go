@@ -55,20 +55,20 @@ func TestCache(t *testing.T) {
 		cache.Set("2", 2)
 		cache.Set("3", 3)
 
-		_, found1 := cache.Get("1")
-		require.False(t, found1)
+		_, found := cache.Get("1")
+		require.False(t, found)
 
-		v2, found2 := cache.Get("2")
-		require.True(t, found2)
-		require.Equal(t, 2, v2)
+		v, found := cache.Get("2")
+		require.True(t, found)
+		require.Equal(t, 2, v)
 
-		v3, found3 := cache.Get("3")
-		require.True(t, found3)
-		require.Equal(t, 3, v3)
+		v, found = cache.Get("3")
+		require.True(t, found)
+		require.Equal(t, 3, v)
 
 		cache.Clear()
-		_, found4 := cache.Get("3")
-		require.False(t, found4)
+		_, found = cache.Get("3")
+		require.False(t, found)
 	})
 }
 
