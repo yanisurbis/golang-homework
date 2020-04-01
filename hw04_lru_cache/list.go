@@ -84,7 +84,6 @@ func (l *list) PushBack(v interface{}) *listItem {
 }
 
 func (l *list) Remove(i *listItem) {
-	// QUESTION: how to make sure the list contains this particular item?
 	if i == nil || l.Length == 0 {
 		return
 	}
