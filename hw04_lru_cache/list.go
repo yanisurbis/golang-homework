@@ -132,9 +132,5 @@ func (l *list) MoveToFront(i *listItem) {
 }
 
 func NewList() List {
-	return &list{
-		Head:   nil,
-		Tail:   nil,
-		Length: 0,
-	}
+	return &list{}
 }
