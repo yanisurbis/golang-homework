@@ -66,6 +66,13 @@ func TestCache(t *testing.T) {
 		require.True(t, found)
 		require.Equal(t, 3, v)
 
+		cache.Set("4", 4)
+		cache.Set("5", 5)
+		_, found = cache.Get("3")
+		require.False(t, found)
+		_, found = cache.Get("2")
+		require.False(t, found)
+
 		cache.Clear()
 		_, found = cache.Get("3")
 		require.False(t, found)
