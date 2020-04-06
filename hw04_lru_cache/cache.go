@@ -3,7 +3,7 @@ package hw04_lru_cache //nolint:golint,stylecheck
 type Key string
 
 type cacheItem struct {
-	Key Key
+	Key   Key
 	Value interface{}
 }
 
