@@ -14,54 +14,54 @@ type Cache interface {
 }
 
 type lruCache struct {
-	Size     int
-	Queue    List
-	Elements map[Key]*listItem
+	size     int
+	queue    List
+	elements map[Key]*listItem
 }
 
 func (cache *lruCache) Set(key Key, value interface{}) bool {
-	element, found := cache.Elements[key]
+	element, found := cache.elements[key]
 	if found {
-		cache.Queue.Remove(element)
-		cache.Elements[key] = cache.Queue.PushFront(cacheItem{
+		cache.queue.Remove(element)
+		cache.elements[key] = cache.queue.PushFront(cacheItem{
 			Key:   key,
 			Value: value,
 		})
 		return true
 	}
 
-	if cache.Queue.Len() == cache.Size {
-		elmToDelete := cache.Queue.Back()
-		cache.Queue.Remove(elmToDelete)
-		delete(cache.Elements, elmToDelete.Value.(cacheItem).Key)
+	if cache.queue.Len() == cache.size {
+		elmToDelete := cache.queue.Back()
+		cache.queue.Remove(elmToDelete)
+		delete(cache.elements, elmToDelete.value.(cacheItem).Key)
 	}
 
-	elm := cache.Queue.PushFront(cacheItem{
+	elm := cache.queue.PushFront(cacheItem{
 		Key:   key,
 		Value: value,
 	})
-	cache.Elements[key] = elm
+	cache.elements[key] = elm
 	return false
 }
 
 func (cache *lruCache) Get(key Key) (interface{}, bool) {
-	element, found := cache.Elements[key]
+	element, found := cache.elements[key]
 	if found {
-		cache.Queue.MoveToFront(element)
-		return element.Value.(cacheItem).Value, true
+		cache.queue.MoveToFront(element)
+		return element.value.(cacheItem).Value, true
 	}
 	return nil, false
 }
 
 func (cache *lruCache) Clear() {
-	cache.Queue = NewList()
-	cache.Elements = make(map[Key]*listItem, cache.Size)
+	cache.queue = NewList()
+	cache.elements = make(map[Key]*listItem, cache.size)
 }
 
 func NewCache(size int) Cache {
 	return &lruCache{
-		Size:     size,
-		Queue:    NewList(),
-		Elements: make(map[Key]*listItem, size),
+		size:     size,
+		queue:    NewList(),
+		elements: make(map[Key]*listItem, size),
 	}
 }

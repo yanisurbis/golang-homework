@@ -1,15 +1,15 @@
 package hw04_lru_cache //nolint:golint,stylecheck
 
 type listItem struct {
-	Value interface{}
-	Next  *listItem
-	Prev  *listItem
+	value interface{}
+	next  *listItem
+	prev  *listItem
 }
 
 type list struct {
-	Head   *listItem
-	Tail   *listItem
-	Length int
+	head   *listItem
+	tail   *listItem
+	length int
 }
 
 type List interface {
@@ -23,96 +23,96 @@ type List interface {
 }
 
 func (l list) Len() int {
-	return l.Length
+	return l.length
 }
 
 func (l list) Front() *listItem {
-	return l.Head
+	return l.head
 }
 
 func (l list) Back() *listItem {
-	return l.Tail
+	return l.tail
 }
 
 func (l *list) AddFirstElement(v interface{}) *listItem {
 	newElm := &listItem{
-		Value: v,
-		Next:  nil,
-		Prev:  nil,
+		value: v,
+		next:  nil,
+		prev:  nil,
 	}
-	l.Head = newElm
-	l.Tail = newElm
-	l.Length = 1
+	l.head = newElm
+	l.tail = newElm
+	l.length = 1
 
 	return newElm
 }
 
 func (l *list) PushFront(v interface{}) *listItem {
-	if l.Length == 0 {
+	if l.length == 0 {
 		return l.AddFirstElement(v)
 	}
 
-	head := l.Head
+	head := l.head
 	newElm := &listItem{
-		Value: v,
-		Next:  head,
-		Prev:  nil,
+		value: v,
+		next:  head,
+		prev:  nil,
 	}
-	head.Prev = newElm
-	l.Head = newElm
-	l.Length++
+	head.prev = newElm
+	l.head = newElm
+	l.length++
 
 	return newElm
 }
 
 func (l *list) PushBack(v interface{}) *listItem {
-	if l.Length == 0 {
+	if l.length == 0 {
 		return l.AddFirstElement(v)
 	}
 
-	tail := l.Tail
+	tail := l.tail
 	newElm := &listItem{
-		Value: v,
-		Next:  nil,
-		Prev:  tail,
+		value: v,
+		next:  nil,
+		prev:  tail,
 	}
-	tail.Next = newElm
-	l.Tail = newElm
-	l.Length++
+	tail.next = newElm
+	l.tail = newElm
+	l.length++
 
 	return newElm
 }
 
 func (l *list) Remove(i *listItem) {
-	if i == nil || l.Length == 0 {
+	if i == nil || l.length == 0 {
 		return
 	}
 
-	if i.Prev != nil && i.Next != nil {
-		i.Prev.Next = i.Next
-		i.Next.Prev = i.Prev
-		l.Length--
+	if i.prev != nil && i.next != nil {
+		i.prev.next = i.next
+		i.next.prev = i.prev
+		l.length--
 		return
 	}
 
-	if i.Prev == nil && i.Next != nil {
-		l.Head = i.Next
-		l.Head.Prev = nil
-		l.Length--
+	if i.prev == nil && i.next != nil {
+		l.head = i.next
+		l.head.prev = nil
+		l.length--
 		return
 	}
 
-	if i.Prev != nil && i.Next == nil {
-		l.Tail = i.Prev
-		l.Tail.Next = nil
-		l.Length--
+	if i.prev != nil && i.next == nil {
+		l.tail = i.prev
+		l.tail.next = nil
+		l.length--
 		return
 	}
 
-	if i.Prev == nil && i.Next == nil {
-		l.Head = nil
-		l.Tail = nil
-		l.Length = 0
+	if i.prev == nil && i.next == nil {
+		l.head = nil
+		l.tail = nil
+		l.length = 0
 		return
 	}
 }
@@ -122,7 +122,7 @@ func (l *list) MoveToFront(i *listItem) {
 		return
 	}
 	l.Remove(i)
-	l.PushFront(i.Value)
+	l.PushFront(i.value)
 }
 
 func NewList() List {
