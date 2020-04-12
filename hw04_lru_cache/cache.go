@@ -19,6 +19,10 @@ type lruCache struct {
 	elements map[Key]*listItem
 }
 
+func (cache *lruCache) isFull() bool {
+	return cache.queue.Len() == cache.size
+}
+
 func (cache *lruCache) Set(key Key, value interface{}) bool {
 	element, found := cache.elements[key]
 	if found {
@@ -30,7 +34,7 @@ func (cache *lruCache) Set(key Key, value interface{}) bool {
 		return true
 	}
 
-	if cache.queue.Len() == cache.size {
+	if cache.isFull() {
 		elmToDelete := cache.queue.Back()
 		cache.queue.Remove(elmToDelete)
 		delete(cache.elements, elmToDelete.value.(cacheItem).Key)
