@@ -26,11 +26,11 @@ func (cache *lruCache) isFull() bool {
 func (cache *lruCache) Set(key Key, value interface{}) bool {
 	element, found := cache.elements[key]
 	if found {
-		cache.queue.Remove(element)
-		cache.elements[key] = cache.queue.PushFront(cacheItem{
+		element.value = cacheItem{
 			Key:   key,
 			Value: value,
-		})
+		}
+		cache.queue.MoveToFront(element)
 		return true
 	}
 
