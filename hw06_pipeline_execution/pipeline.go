@@ -31,29 +31,12 @@ func StopWhenDone(out Out, done In) Out {
 }
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
-	in_ := make(Bi)
-	go func() {
-		for v := range in {
-			select {
-				case <- done:
-					fmt.Println("stopped")
-					close(in_)
-					return
-				default:
-					fmt.Println("not stopped")
-			}
-			fmt.Println(v)
-			in_ <- v
-		}
-		close(in_)
-	}()
-
 	out := make(Out)
 	for i, stage := range stages {
 		if i == 0 {
-			out = stage(in_)
+			out = StopWhenDone(stage(in), done)
 		} else {
-			out = stage(out)
+			out = StopWhenDone(stage(out), done)
 		}
 	}
 
