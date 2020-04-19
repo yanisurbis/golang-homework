@@ -10,20 +10,20 @@ type (
 type Stage func(in In) (out Out)
 
 func CloseWhenDone(out Out, done In) Out {
-	out_ := make(Bi)
+	out1 := make(Bi)
 	go func() {
 		for v := range out {
 			select {
-			case <- done:
-				close(out_)
+			case <-done:
+				close(out1)
 				return
 			default:
 			}
-			out_ <- v
+			out1 <- v
 		}
-		close(out_)
+		close(out1)
 	}()
-	return out_
+	return out1
 }
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
