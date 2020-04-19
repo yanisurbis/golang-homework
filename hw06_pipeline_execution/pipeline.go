@@ -1,4 +1,5 @@
 package hw06_pipeline_execution //nolint:golint,stylecheck
+import "fmt"
 
 type (
 	I   = interface{}
@@ -9,16 +10,33 @@ type (
 
 type Stage func(in In) (out Out)
 
+
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
-	// Place your code here
-	//for v := range in {
-	//	fmt.Println(v)
-	//}
+	in_ := make(Bi)
+	go func() {
+		for v := range in {
+			select {
+				case <- done:
+					fmt.Println("stopped")
+					close(in_)
+					return
+				default:
+					fmt.Println("not stopped")
+			}
+			fmt.Println(v)
+			in_ <- v
+		}
+		close(in_)
+	}()
 
-	out1 := stages[0](in)
-	out2 := stages[1](out1)
-	out3 := stages[2](out2)
-	out4 := stages[3](out3)
+	out := make(Out)
+	for i, stage := range stages {
+		if i == 0 {
+			out = stage(in_)
+		} else {
+			out = stage(out)
+		}
+	}
 
-	return out4
+	return out
 }
