@@ -10,6 +10,25 @@ type (
 
 type Stage func(in In) (out Out)
 
+func StopWhenDone(out Out, done In) Out {
+	out_ := make(Bi)
+	go func() {
+		for v := range out {
+			select {
+			case <- done:
+				fmt.Println("stopped")
+				close(out_)
+				return
+			default:
+				fmt.Println("not stopped")
+			}
+			fmt.Println(v)
+			out_ <- v
+		}
+		close(out_)
+	}()
+	return out_
+}
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
 	in_ := make(Bi)
