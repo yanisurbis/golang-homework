@@ -11,7 +11,7 @@ type Stage func(in In) (out Out)
 
 func CloseWhenDone(out Out, done In) Out {
 	out1 := make(Bi)
-	go func() {
+	go func(out Out, out1 Bi) {
 		for v := range out {
 			select {
 			case <-done:
@@ -22,7 +22,7 @@ func CloseWhenDone(out Out, done In) Out {
 			out1 <- v
 		}
 		close(out1)
-	}()
+	}(out, out1)
 	return out1
 }
 
